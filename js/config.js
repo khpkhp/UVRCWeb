@@ -2,22 +2,8 @@
 const config = {
     // API base URL - change this for different environments
     apiBaseUrl: (() => {
-        const hostname = window.location.hostname;
-        const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
-        const isGitHubCodespaces = hostname.endsWith('.app.github.dev');
-        
-        if (isLocalhost) {
-            return 'http://localhost:3000/api';
-        } else if (isGitHubCodespaces) {
-            // For GitHub Codespaces
-            return `${window.location.protocol}//${hostname}:3000/api`;
-        } else if (hostname === 'uvrc-web.vercel.app') {
-            // For Vercel deployment
-            return 'https://uvrc-web.vercel.app/api';
-        } else {
-            // For other environments
-            return '/api';
-        }
+        // For Vercel deployment
+        return 'https://uvrc-web.vercel.app/api';
     })(),
 
     // Helper function to make API calls
@@ -34,7 +20,8 @@ const config = {
                     'X-Requested-With': 'XMLHttpRequest',
                     ...options.headers
                 },
-                credentials: 'include'
+                mode: 'cors',
+                credentials: 'same-origin' // Changed from 'include' for Vercel
             });
             
             if (!response.ok) {
@@ -58,5 +45,11 @@ const config = {
     // Helper function to display errors
     showError(message) {
         console.error(message);
+        // Add visual feedback for users
+        const errorDiv = document.createElement('div');
+        errorDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #ff4444; color: white; padding: 15px; border-radius: 5px; z-index: 1000;';
+        errorDiv.textContent = message;
+        document.body.appendChild(errorDiv);
+        setTimeout(() => errorDiv.remove(), 5000);
     }
 };
