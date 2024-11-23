@@ -10,11 +10,15 @@ const middlewares = jsonServer.defaults({
     noCors: false
 });
 
-// Enable CORS for Vercel deployment
+// Enable CORS for development and production
 server.use(cors({
     origin: [
         'https://uvrc-web.vercel.app',
-        'https://*.vercel.app'
+        'https://*.vercel.app',
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+        'http://localhost:5000',
+        'http://127.0.0.1:5000'
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: [
@@ -24,16 +28,32 @@ server.use(cors({
         'Accept',
         'Origin'
     ],
+    credentials: true,
     optionsSuccessStatus: 204,
     maxAge: 86400 // 24 hours
 }));
 
 // Additional security headers
 server.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (origin) {
+        // Allow the specific origin that made the request
+        res.header('Access-Control-Allow-Origin', origin);
+    }
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Max-Age', '86400');
+    
+    // Security headers
     res.header('X-Content-Type-Options', 'nosniff');
     res.header('X-Frame-Options', 'DENY');
     res.header('X-XSS-Protection', '1; mode=block');
     res.header('Referrer-Policy', 'strict-origin-when-cross-origin');
+    
+    if (req.method === 'OPTIONS') {
+        return res.status(204).end();
+    }
     next();
 });
 

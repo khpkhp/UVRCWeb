@@ -2,8 +2,18 @@
 const config = {
     // API base URL - change this for different environments
     apiBaseUrl: (() => {
-        // For Vercel deployment
-        return 'https://uvrc-web.vercel.app/api';
+        const hostname = window.location.hostname;
+        const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
+        const isVercel = hostname === 'uvrc-web.vercel.app' || hostname.endsWith('.vercel.app');
+        
+        if (isLocalhost) {
+            return 'http://localhost:3000/api';
+        } else if (isVercel) {
+            return 'https://uvrc-web.vercel.app/api';
+        } else {
+            // Default to relative path
+            return '/api';
+        }
     })(),
 
     // Helper function to make API calls
@@ -21,7 +31,7 @@ const config = {
                     ...options.headers
                 },
                 mode: 'cors',
-                credentials: 'same-origin' // Changed from 'include' for Vercel
+                credentials: 'include'
             });
             
             if (!response.ok) {
@@ -38,6 +48,8 @@ const config = {
             return data;
         } catch (error) {
             console.error('API call failed:', error);
+            const errorMessage = `Failed to fetch data: ${error.message}`;
+            this.showError(errorMessage);
             throw error;
         }
     },
@@ -47,9 +59,13 @@ const config = {
         console.error(message);
         // Add visual feedback for users
         const errorDiv = document.createElement('div');
-        errorDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #ff4444; color: white; padding: 15px; border-radius: 5px; z-index: 1000;';
+        errorDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #ff4444; color: white; padding: 15px; border-radius: 5px; z-index: 1000; box-shadow: 0 2px 4px rgba(0,0,0,0.2);';
         errorDiv.textContent = message;
         document.body.appendChild(errorDiv);
-        setTimeout(() => errorDiv.remove(), 5000);
+        setTimeout(() => {
+            errorDiv.style.opacity = '0';
+            errorDiv.style.transition = 'opacity 0.5s ease-out';
+            setTimeout(() => errorDiv.remove(), 500);
+        }, 4500);
     }
 };
