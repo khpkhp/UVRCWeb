@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documents</title>
+</head>
+<style>
+    h1 {
+        font-family:'Noto Sans';
+        margin-top: 10px;
+        font-size: 42px;
+        text-align: center;
+        color: #A50C0C;
+        font-weight: bold;
+      }
+    th {
+        font-family: 'Noto Sans';
+        font-size: 24px;
+        text-align: center;
+        font-weight: bold;
+        color: #A50C0C;
+        border-width: 2px;
+        
+        
+    }
+    tr{
+        width: 1000px;
+    }
+    td {
+        font-family: 'Noto Sans';
+        font-size: 21px;
+        text-align: center;
+        border-width: 2px;
+    }
+    table {
+        border-collapse: collapse;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .tnum {
+        width: 5px;
+    }
+    .tname {
+        width: 500px;
+    }
+    .tcode {
+        width: 200px;
+    }
+</style>
+
+<body>
+    <h1>UVRC - ALLIANCE TAB - EDIT TEAM NAME</h1>
+    <form>
+        <table border="white" id="mytable">
+            <tr>
+                <th class="tnum">#</th>
+                <th class="tname">TEAM Name</th>
+                <th class="tcode">TEAM Code</th>
+            </tr>
+            <tr>
+                <td>
+                    <input type="number" id="teamnum" name="teamnum">
+                </td>
+                <td id="teamname">KAT</td>
+                <td id="teamcode">KAT</td>
+            </tr>
+            <tr>
+                <td><input type="number" id="teamnum"></td>
+                <td id="teamname">Abolute</td>
+                <td id="teamcode">ABS</td>
+            </tr>
+            <tr>
+                <td><input type="number" id="teamnum"></td>
+                <td id="teamname">URAS</td>
+                <td id="teamcode">URA</td>
+            </tr>
+            <tr>
+                <td><input type="number" id="teamnum"></td>
+                <td id="teamname">99FSC TechMate</td>
+                <td id="teamcode">99F</td>
+            </tr>
+            <tr>
+                <td><input type="number" id="teamnum"></td>
+                <td id="teamname">RISE AND SHINE</td>
+                <td id="teamcode">RAS</td>
+            </tr>
+            <tr>
+                <td><input type="number" id="teamnum"></td>
+                <td id="teamname">COS</td>
+                <td id="teamcode">COS</td>
+            </tr>
+            <tr>
+                <td><input type="number" id="teamnum"></td>
+                <td id="teamname">CRAS</td>
+                <td id="teamcode">CRA</td>
+            </tr>
+            <tr>
+                <td><input type="number" id="teamnum"></td>
+                <td id="teamname">Enterprise</td>
+                <td id="teamcode">ENT</td>
+            </tr>
+            <tr>
+                <td><input type="number" id="teamnum"></td>
+                <td id="teamname">FRITS</td>
+                <td id="teamcode">FRT</td>
+            </tr>
+            <tr>
+                <td><input type="number" id="teamnum"></td>
+                <td id="teamname">PKK - Explosion Of Energy</td>
+                <td id="teamcode">PPK</td>
+            </tr>
+            <tr>
+                <td><input type="number" id="teamnum"></td>
+                <td id="teamname">STEAM Yên Hoà</td>
+                <td id="teamcode">SYH</td>
+            </tr>
+            <tr>
+                <td><input type="number" id="teamnum"></td>
+                <td id="teamname">PioTech </td>
+                <td id="teamcode">PIT</td>
+            </tr>
+            <tr>
+                <td><input type="number" id="teamnum"></td>
+                <td id="teamname">FBG-Prime</td>
+                <td id="teamcode">FBG</td>
+            </tr>
+            <tr>
+                <td><input type="number" id="teamnum"></td>
+                <td id="teamname">Greased Lightning</td>
+                <td id="teamcode">GRL</td>
+            </tr>
+            <tr>
+                <td><input type="number" id="teamnum"></td>
+                <td id="teamname">Fantastic Five</td>
+                <td id="teamcode">FAF</td>
+            </tr>
+            <tr>
+                <td><input type="number" id="teamnum"></td>
+                <td id="teamname">Robotech Explorer</td>
+                <td id="teamcode">ROE</td>
+            </tr>
+    
+          </table>
+
+          <button type="submit">Submit</button>
+    </form>
+   
+</body>
+ <script>
+        function handleSubmit(event) {
+            event.preventDefault();
+        
+            const data = new FormData(event.target);
+        
+            // Do a bit of work to convert the entries to a plain JS object
+            const value = Object.fromEntries(data.entries());
+        
+        
+            const myJson = JSON.stringify(value)
+            console.log(myJson);
+           
+        }
+        
+        const form = document.querySelector('form');
+        form.addEventListener('submit', handleSubmit);
+        
+ </script>
+    
+
+</html>

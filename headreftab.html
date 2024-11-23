@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEAD-REF TAB</title>
+</head>
+<style>
+    h1 {
+        font-family:'Noto Sans';
+        margin-top: 10px;
+        font-size: 42px;
+        text-align: center;
+        color: #A50C0C;
+        font-weight: bold;
+      }
+    th {
+        font-family: 'Noto Sans';
+        font-size: 24px;
+        text-align: center;
+        font-weight: bold;
+        border: 1px solid black;
+        padding: 10px;
+    }
+    tr{
+        width: 1000px;
+    }
+    td {
+        font-family: 'Noto Sans';
+        font-size: 21px;
+        padding: 10px;
+        border: 1px solid black;
+ 
+    }
+    table {
+        border-collapse: collapse;
+        margin-left: auto;
+        margin-right: auto;
+        border: 1px solid black;
+    }
+    .left {width: 1000px;}
+    .right {width: 300px;}
+    .head {
+        font-family: 'Noto Sans';
+        font-size: 24px;
+        text-align: center;
+        font-weight: bold;
+        border: 1px solid black;
+        padding: 10px;
+    }
+    .total {
+        font-weight: bold;
+    }
+</style>
+
+<body>
+    <h1>UVRC - HEAD REF TAB</h1>
+<table>
+    <tr>
+        <form action="" id="formmatchnum">
+            <th colspan=4 class="left">Trận</th>
+            <th class="right" id="matchtyped">
+                <input type="text" name="matchtype" id="matchtype">
+        </th>
+            <th class="right" id="matchnumd">
+                    <input type="text" name="matchnum" id="matchnum">
+            </th>
+            
+            <th><input type="submit" value="save"></th>
+        </form>
+    </tr>
+    <tr class="head">
+        <form action="" id="getdata">
+        <td>Điểm hệ số</td>
+        <td>GT</td>
+        <td>SLĐ</td>
+        <td>SLX</td>
+        <td>Score LMĐ</td>
+        <td>Score LMX</td>
+    </tr>
+    <tr>
+        <td>Xe chứa nước của liên minh có/không trong khu vực đỗ</td>
+        <td>x1.25/x1</td>
+        <td>
+            <input type="hidden" name="multiplierred" value=0><input type="checkbox" onclick="this.previousSibling.value=1-this.previousSibling.value">
+        </td>
+        <td>
+            <input type="hidden" name="multiplierblue" value=0><input type="checkbox" onclick="this.previousSibling.value=1-this.previousSibling.value">
+        </td>
+        <td id="dmred"></td>
+        <td id="dmblue"></td>
+    </tr>
+    <tr>
+        <td colspan="4" class="total">TỔNG ĐIỂM HỆ SỐ</td>
+        <td id="dmred"></td>
+        <td id="dmblue"></td>
+    </tr>
+
+    <tr class="head">
+        <td>Penalty</td>
+        <td>GT</td>
+        <td>SLĐ</td>
+        <td>SLX</td>
+        <td>Score LMĐ</td>
+        <td>Score LMX</td>
+    </tr>
+    <tr>
+        <td>Penalty + nhắc nhở</td>
+        <td>10</td>
+        <td>
+                <input type="number" name="penred" id="penred">
+        </td>
+        <td>
+                <input type="number" name="penblue" id="penblue">
+        </td>
+        <td id="dpred"></td>
+        <td id="dpblue"></td>
+    </tr>
+    <tr>
+        <td>Thẻ vàng</td>
+        <td>20</td>
+        <td>
+                <input type="number" name="yelred" id="yelred">
+        </td>
+        <td>
+                <input type="number" name="yelblue" id="yelblue">
+        </td>
+        <td id="dyred"></td>
+        <td id="dyblue"></td>
+    </tr>
+    <tr>
+        <td>Thẻ đỏ</td>
+        <td></td>
+        <td>
+            <input type="hidden" name="redred" value=0><input type="checkbox" onclick="this.previousSibling.value=1-this.previousSibling.value">
+        </td>
+        <td>
+            <input type="hidden" name="redblue" value=0><input type="checkbox" onclick="this.previousSibling.value=1-this.previousSibling.value">
+        </td>
+        <td id="drred"></td>
+        <td id="drblue"></td>
+    </tr>
+    <tr>
+        <td colspan="4" class="total">TỔNG ĐIỂM PENALTY</td>
+        <td></td>
+        <td></td>
+        <td>
+            <input type="submit" value="save">
+        </td>
+    </form>
+    </tr>
+</table>    
+
+</body>
+<script>
+    async function postFormDataAsJson({ url, formData }) {
+      const plainFormData = Object.fromEntries(formData.entries());
+      const formDataJsonString = JSON.stringify(plainFormData);
+        
+      const fetchOptions = {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: formDataJsonString,
+      };
+    
+      const response = await fetch(url, fetchOptions);
+    
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(errorMessage);
+      }
+    
+      return response.json();
+
+    }
+        async function getmatchnum(event) {
+        event.preventDefault();
+        
+        const form = event.currentTarget;
+        try {
+            const formData = new FormData(form);
+            const plainFormData = Object.fromEntries(formData.entries());
+            const formDataJsonString = JSON.stringify(plainFormData);
+            document.getElementById("matchnumd").innerHTML = plainFormData.matchnum
+            document.getElementById("matchtyped").innerHTML = plainFormData.matchtype
+
+            display(plainFormData.matchnum, plainFormData.matchtype);
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+  
+    async function handleFormSubmit(event) {
+      event.preventDefault();
+      const matchnum = document.getElementById("matchnumd").innerHTML
+      const matchtype = document.getElementById("matchtyped").innerHTML
+
+      const url = "http://localhost:3000/" + matchtype + "matches/" + matchnum;
+      const form = event.currentTarget;
+      try {
+        const formData = new FormData(form);
+        const responseData = await postFormDataAsJson({ url, formData });
+        console.log("url");
+        console.log({ responseData });
+      } catch (error) {
+        console.error(error);
+      }
+      
+    }
+    function test(event) {
+        event.preventDefault();
+        const form = event.currentTarget;
+        try {
+            const display = document.getElementById("matchnumd").innerHTML
+            console.log(display)
+            const formData = new FormData(form);
+            const plainFormData = Object.fromEntries(formData.entries());
+            const formDataJsonString = JSON.stringify(plainFormData);
+            console.log(formDataJsonString)
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+    function display(matchnum, matchtype) {
+        const xmlhttp = new XMLHttpRequest();
+        xmlhttp.onload = function() {
+            const myObj = JSON.parse(this.responseText);
+            if (myObj.multiplierred == 1) {
+                document.getElementById("dmred").innerHTML = 1.25;
+            }
+            else {
+                document.getElementById("dmred").innerHTML = 1;
+            }
+            if (myObj.multiplierblue == 1) {
+                document.getElementById("dmblue").innerHTML = 1.25;
+            }
+            else {
+                document.getElementById("dmblue").innerHTML = 1;
+            }
+            document.getElementById("dyred").innerHTML = myObj.yelred * 20;
+            document.getElementById("dyblue").innerHTML = myObj.yelblue * 20;
+            document.getElementById("dpred").innerHTML = myObj.penred * 10;
+            document.getElementById("dpblue").innerHTML = myObj.penblue * 10;
+            document.getElementById("drred").innerHTML = myObj.redred;
+            document.getElementById("drblue").innerHTML = myObj.redblue;
+            console.log(myObj)
+            }
+        xmlhttp.open("GET", "http://localhost:3000/" + matchtype +  "matches/" + matchnum);
+        xmlhttp.send();
+    }
+    
+    const Form1 = document.getElementById("formmatchnum");
+    Form1.addEventListener("submit", getmatchnum);
+    const Form2 = document.getElementById("getdata");
+    Form2.addEventListener("submit", handleFormSubmit);
+   
+    
+    
+  
+  </script>
+</html>
