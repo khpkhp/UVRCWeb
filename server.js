@@ -14,9 +14,15 @@ const middlewares = jsonServer.defaults({
     bodyParser: true
 });
 
-// Enable CORS for development
+// Enable CORS for development and Vercel deployment
 server.use(cors({
-    origin: '*', // Allow all origins for development
+    origin: [
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+        'http://localhost:5000',
+        'http://127.0.0.1:5000',
+        'https://uvrc-web.vercel.app'
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
     credentials: true
