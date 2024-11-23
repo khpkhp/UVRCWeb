@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
 <style>
 h1 {
         font-family:'Noto Sans';
@@ -44,27 +46,30 @@ table {
 }
 </style>
 <body>
-  
 
 <h1>UVRC - TEAM LIST</h1>
 
 <p id="demo"></p>
+<div id="error" class="error"></div>
 
 <script>
-const xmlhttp = new XMLHttpRequest();
-xmlhttp.onload = function() {
-  const myObj = JSON.parse(this.responseText);
-  let text = "<table border='white'><tr><th class='tnum'>#</th><th class='tname'>TEAM Name</th><th class='tcode'>TEAM Code</th></tr>";
-  for (let x in myObj){
-    text += "<tr><td>" + (myObj[x].id) + "</td><td>" + myObj[x].teamname + "</td><td>" + myObj[x].teamcode +"</td></tr>";
-  }
-  text += "</table>" 
-  document.getElementById("demo").innerHTML = text;
-  console.log(myObj)
+async function loadTeams() {
+    try {
+        const teams = await api.loadTeams();
+        let text = "<table border='1'><tr><th class='tnum'>NO</th><th class='tname'>TEAM NAME</th><th class='tcode'>TEAM CODE</th></tr>";
+        
+        teams.forEach(team => {
+            text += "<tr><td>" + team.id + "</td><td>" + team.teamname + "</td><td>" + team.teamcode + "</td></tr>";
+        });
+        
+        text += "</table>";
+        document.getElementById("demo").innerHTML = text;
+    } catch (error) {
+        document.getElementById("error").textContent = 'Failed to load team list: ' + error.message;
+    }
 }
-xmlhttp.open("GET", "http://localhost:3000/team");
-xmlhttp.send();
 
+loadTeams();
 </script>
 
 </body>
