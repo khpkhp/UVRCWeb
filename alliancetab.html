@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="/js/config.js"></script>
+    <script src="/js/api.js"></script>
     <style>
         h1 {
             font-family:'Noto Sans';
@@ -37,47 +39,35 @@
             text-align: center;
             margin-bottom: 50px;
         }
+        .error {
+            color: red;
+        }
     </style>
 </head>
 <body>
     <h1>
-        UVRC - CHOOSE YOUR TAB
+        UVRC - ALLIANCE SELECTION
     </h1>
-    <div class="row">
-        <a href="teamlist.html" class="button"> 
-            Team List
-        </a>
-    </div>
-   <!--  <div class="row">
-        <a href="editteamname.html" class="button"> 
-            Edit Team Name
-        </a>
-    </div> -->
+    <p id="demo"></p>
+    <div id="error" class="error"></div>
 
-    </div>
+    <script>
+    async function loadAlliances() {
+        try {
+            const teams = await api.loadTeams();
+            let text = "<table border='1'><tr><th>ALLIANCE</th><th>CAPTAIN</th><th>FIRST PICK</th></tr>";
+            teams.forEach(team => {
+                text += `<tr><td>${team.alliance || '-'}</td><td>${team.teamname}</td><td>${team.firstPick || '-'}</td></tr>`;
+            });
+            text += "</table>";
+            document.getElementById("demo").innerHTML = text;
+        } catch (error) {
+            document.getElementById("error").textContent = 'Failed to load alliances: ' + error.message;
+        }
+    }
 
-    <div class="row">
-        <a href="pmedit.html" class="button"> 
-            Practice/Qualification Matches Edit
-        </a>
-    </div>
-    
-    
-    <div class="row">
-        <a href="poalliancesedit.html" class="button"> 
-            Playoff Alliances Edit
-        </a>
-    </div>
-    <div class="row">
-        <a href="poalliancesview.html" class="button"> 
-            Playoff Alliances View
-        </a>
-    </div>
-
-
-
-
-
+    loadAlliances();
+    </script>
 
 </body>
 </html>
