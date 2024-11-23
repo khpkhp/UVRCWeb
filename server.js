@@ -7,8 +7,17 @@ const server = express();
 const router = jsonServer.router('db.json');
 const middlewares = jsonServer.defaults();
 
-// Enable CORS for all routes
-server.use(cors());
+// Enable CORS for specific origins
+server.use(cors({
+    origin: [
+        'https://uvrc-web.vercel.app',
+        'http://localhost:3000',
+        'http://127.0.0.1:3000'
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
 
 // Set default middlewares (logger, static, cors and no-cache)
 server.use(middlewares);
@@ -26,5 +35,6 @@ server.get('*', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log('API is configured for Vercel deployment at https://uvrc-web.vercel.app');
 });

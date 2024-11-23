@@ -1,9 +1,7 @@
 // Configuration for the application
 const config = {
     // API base URL - change this for different environments
-    apiBaseUrl: window.location.hostname === 'localhost' 
-        ? 'http://localhost:3000/api'
-        : '/api', // for production
+    apiBaseUrl: 'https://uvrc-web.vercel.app/api',
 
     // Helper function to make API calls
     async fetchApi(endpoint, options = {}) {
@@ -29,6 +27,6 @@ const config = {
 
     // Helper function to display errors
     showError(message) {
-        alert(`Error: ${message}`);
+        console.error(message);
     }
 };
