@@ -1,47 +1,42 @@
-<!-- Common header for all pages -->
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Add our API utilities -->
-    <script src="/js/config.js"></script>
-    <script src="/js/api.js"></script>
-    <style>
-        h1 {
-            font-family: 'Noto Sans';
-            margin-top: 10px;
-            font-size: 42px;
-            text-align: center;
-            color: #A50C0C;
-            font-weight: bold;
+// Configuration for the application
+const config = {
+    // API base URL - change this for different environments
+    apiBaseUrl: 'https://uvrc-web.vercel.app/api',
+
+    // Helper function to make API calls
+    async fetchApi(endpoint, options = {}) {
+        const url = `${this.apiBaseUrl}/${endpoint}`;
+        console.log('Fetching from URL:', url);
+        
+        try {
+            const response = await fetch(url, {
+                ...options,
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...options.headers
+                }
+            });
+            
+            if (!response.ok) {
+                console.error('API Response:', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    url: response.url
+                });
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            console.log('API Response Data:', data);
+            return data;
+        } catch (error) {
+            console.error('API call failed:', error);
+            throw error;
         }
-        th {
-            font-family: 'Noto Sans';
-            font-size: 24px;
-            text-align: center;
-            font-weight: bold;
-            color: #A50C0C;
-            border-width: 2px;
-        }
-        td {
-            font-family: 'Noto Sans';
-            font-size: 21px;
-            text-align: center;
-            border-width: 2px;
-        }
-        table {
-            border-collapse: collapse;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .error {
-            color: red;
-            text-align: center;
-            margin: 10px;
-        }
-        .success {
-            color: green;
-            text-align: center;
-            margin: 10px;
-        }
-    </style>
-</head>
+    },
+
+    // Helper function to display errors
+    showError(message) {
+        console.error(message);
+    }
+};

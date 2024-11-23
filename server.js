@@ -12,12 +12,33 @@ server.use(cors({
     origin: [
         'https://uvrc-web.vercel.app',
         'http://localhost:3000',
-        'http://127.0.0.1:3000'
+        'http://127.0.0.1:3000',
+        // GitHub Codespaces domains
+        /^https:\/\/.*\.app\.github\.dev$/,
+        // Local development
+        /^http:\/\/localhost:\d+$/,
+        /^http:\/\/127\.0\.0\.1:\d+$/
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
+    allowedHeaders: [
+        'Content-Type',
+        'Authorization',
+        'X-Requested-With',
+        'Accept',
+        'Origin'
+    ],
+    credentials: true,
+    maxAge: 86400 // 24 hours
 }));
+
+// Additional CORS headers for preflight requests
+server.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin');
+    res.header('Access-Control-Max-Age', '86400');
+    next();
+});
 
 // Set default middlewares (logger, static, cors and no-cache)
 server.use(middlewares);
@@ -36,5 +57,8 @@ server.get('*', (req, res) => {
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
-    console.log('API is configured for Vercel deployment at https://uvrc-web.vercel.app');
+    console.log('API is configured for:');
+    console.log('- Vercel deployment at https://uvrc-web.vercel.app');
+    console.log('- GitHub Codespaces');
+    console.log('- Local development');
 });
