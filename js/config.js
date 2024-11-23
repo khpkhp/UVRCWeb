@@ -1,20 +1,7 @@
 // Configuration for the application
 const config = {
     // API base URL - change this for different environments
-    apiBaseUrl: (() => {
-        const hostname = window.location.hostname;
-        const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
-        const isVercel = hostname === 'uvrc-web.vercel.app' || hostname.endsWith('.vercel.app');
-        
-        if (isLocalhost) {
-            return 'http://localhost:3000/api';
-        } else if (isVercel) {
-            return 'https://uvrc-web.vercel.app/api';
-        } else {
-            // Default to relative path
-            return '/api';
-        }
-    })(),
+    apiBaseUrl: 'http://localhost:3000/api', // Use local server for now
 
     // Helper function to make API calls
     async fetchApi(endpoint, options = {}) {

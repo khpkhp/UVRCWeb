@@ -4,117 +4,75 @@ const cors = require('cors');
 const path = require('path');
 
 const server = express();
+
+// Create JSON Server router with custom options
 const router = jsonServer.router('db.json');
 const middlewares = jsonServer.defaults({
     static: '.',
-    noCors: false
+    noCors: false,
+    readOnly: false, // Allow write operations
+    bodyParser: true
 });
 
-// Enable CORS for development and production
+// Enable CORS for development
 server.use(cors({
-    origin: [
-        'https://uvrc-web.vercel.app',
-        'https://*.vercel.app',
-        'http://localhost:3000',
-        'http://127.0.0.1:3000',
-        'http://localhost:5000',
-        'http://127.0.0.1:5000'
-    ],
+    origin: '*', // Allow all origins for development
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: [
-        'Content-Type',
-        'Authorization',
-        'X-Requested-With',
-        'Accept',
-        'Origin'
-    ],
-    credentials: true,
-    optionsSuccessStatus: 204,
-    maxAge: 86400 // 24 hours
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+    credentials: true
 }));
 
-// Additional security headers
-server.use((req, res, next) => {
-    const origin = req.headers.origin;
-    if (origin) {
-        // Allow the specific origin that made the request
-        res.header('Access-Control-Allow-Origin', origin);
-    }
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Max-Age', '86400');
-    
-    // Security headers
-    res.header('X-Content-Type-Options', 'nosniff');
-    res.header('X-Frame-Options', 'DENY');
-    res.header('X-XSS-Protection', '1; mode=block');
-    res.header('Referrer-Policy', 'strict-origin-when-cross-origin');
-    
-    if (req.method === 'OPTIONS') {
-        return res.status(204).end();
-    }
-    next();
-});
-
-// Set default middlewares (logger, static, cors and no-cache)
+// Set default middlewares
 server.use(middlewares);
 
-// Add custom routes before JSON Server router
-server.get('/health', (req, res) => {
-    res.json({ 
-        status: 'UP',
-        timestamp: new Date().toISOString(),
-        environment: process.env.NODE_ENV || 'development'
-    });
-});
-
-// API documentation endpoint
-server.get('/api', (req, res) => {
-    res.json({
-        version: '1.0.0',
-        endpoints: [
-            { path: '/api/team', methods: ['GET'] },
-            { path: '/api/pmmatches', methods: ['GET'] },
-            { path: '/api/qmmatches', methods: ['GET'] },
-            { path: '/api/pomatches', methods: ['GET'] },
-            { path: '/api/results', methods: ['GET'] }
-        ],
-        documentation: 'UVRC Web Tournament Management System API'
-    });
-});
-
-// Rewrite routes to add /api prefix
-server.use('/api', (req, res, next) => {
-    if (req.url === '/') {
-        return res.json({
-            endpoints: [
-                '/api/team',
-                '/api/pmmatches',
-                '/api/qmmatches',
-                '/api/pomatches',
-                '/api/results'
-            ]
-        });
-    }
+// Add logging middleware
+server.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
     next();
 });
 
 // Mount json-server router under /api
 server.use('/api', router);
 
+// Add API documentation endpoint
+server.get('/api', (req, res) => {
+    res.json({
+        version: '1.0.0',
+        endpoints: {
+            team: '/api/team',
+            pmmatches: '/api/pmmatches',
+            qmmatches: '/api/qmmatches',
+            pomatches: '/api/pomatches',
+            results: '/api/results'
+        }
+    });
+});
+
+// Health check endpoint
+server.get('/health', (req, res) => {
+    res.json({ 
+        status: 'UP',
+        timestamp: new Date().toISOString()
+    });
+});
+
 // Handle all other routes by serving index.html
 server.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'index.html'));
 });
 
+// Error handling middleware
+server.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({
+        error: 'Something went wrong!',
+        message: err.message
+    });
+});
+
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-    if (process.env.VERCEL) {
-        console.log('Running on Vercel');
-    }
+    console.log(`Server is running on http://localhost:${PORT}`);
     console.log('\nAvailable endpoints:');
     console.log('GET /api - API documentation');
     console.log('GET /api/team - Team information');
@@ -122,5 +80,4 @@ server.listen(PORT, () => {
     console.log('GET /api/qmmatches - QM matches');
     console.log('GET /api/pomatches - PO matches');
     console.log('GET /api/results - Results');
-    console.log('GET /health - Health check');
 });
