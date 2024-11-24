@@ -1,7 +1,7 @@
 // Configuration for the application
 const config = {
     // API base URL - change this for different environments
-    apiBaseUrl: 'https://uvrc-web.vercel.app/api', // Use local server for now
+    apiBaseUrl: 'https://khpkhp.github.io/UVRCWeb/api', // Use local server for now
 
     // Helper function to make API calls
     async fetchApi(endpoint, options = {}) {
