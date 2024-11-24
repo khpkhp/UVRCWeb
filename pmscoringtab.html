@@ -1,128 +1,621 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PM SCORING TAB</title>
-    <script src="/js/config.js"></script>
-    <script src="/js/api.js"></script>
-    <style>
-        h1 {
-            font-family:'Noto Sans';
-            margin-top: 10px;
-            font-size: 42px;
-            text-align: center;
-            color: #A50C0C;
-            font-weight: bold;
-          }
-        th {
-            font-family: 'Noto Sans';
-            font-size: 24px;
-            text-align: center;
-            font-weight: bold;
-            border: 1px solid black;
-            padding: 10px;
-        }
-        tr{
-            width: 1000px;
-        }
-        td {
-            font-family: 'Noto Sans';
-            font-size: 21px;
-            padding: 10px;
-            border: 1px solid black;
- 
-        }
-        table {
-            border-collapse: collapse;
-            margin-left: auto;
-            margin-right: auto;
-            border: 1px solid black;
-        }
-        .head {
-            font-family: 'Noto Sans';
-            font-size: 24px;
-            text-align: center;
-            font-weight: bold;
-            border: 1px solid black;
-            padding: 10px;
-        }
-        .left {width: 1000px;}
-        .right {width: 300px;}
-    </style>
-</head>
-<body>
+  </head>
+  <style>
+    h1 {
+      font-family: "Noto Sans";
+      margin-top: 10px;
+      font-size: 42px;
+      text-align: center;
+      color: #a50c0c;
+      font-weight: bold;
+    }
+    th {
+      font-family: "Noto Sans";
+      font-size: 24px;
+      text-align: center;
+      font-weight: bold;
+      border: 1px solid black;
+      padding: 10px;
+    }
+    tr {
+      width: 1000px;
+    }
+    td {
+      font-family: "Noto Sans";
+      font-size: 21px;
+      padding: 10px;
+      border: 1px solid black;
+    }
+    table {
+      border-collapse: collapse;
+      margin-left: auto;
+      margin-right: auto;
+      border: 1px solid black;
+    }
+    .head {
+      font-family: "Noto Sans";
+      font-size: 24px;
+      text-align: center;
+      font-weight: bold;
+      border: 1px solid black;
+      padding: 10px;
+    }
+    .left {
+      width: 1000px;
+    }
+    .right {
+      width: 300px;
+    }
+  </style>
+  <body>
     <h1>UVRC - PM SCORING TAB</h1>
-    <div class="container">
-        <div class="match-info">
-            <input type="text" id="matchnum" placeholder="Match Number">
-            <button onclick="loadMatch()">Load Match</button>
-        </div>
-        
-        <div class="scoring-form">
-            <div class="alliance red">
-                <h2>Red Alliance</h2>
-                <input type="text" id="redteam1" placeholder="Red Team 1">
-                <input type="text" id="redteam2" placeholder="Red Team 2">
-                <input type="number" id="scorered" placeholder="Score">
-            </div>
-            
-            <div class="alliance blue">
-                <h2>Blue Alliance</h2>
-                <input type="text" id="blueteam1" placeholder="Blue Team 1">
-                <input type="text" id="blueteam2" placeholder="Blue Team 2">
-                <input type="number" id="scoreblue" placeholder="Score">
-            </div>
-            
-            <button onclick="saveMatch()">Save Match</button>
-        </div>
-        
-        <div id="error" class="error"></div>
-        <div id="success" class="success"></div>
-    </div>
+    <table>
+      <tr>
+        <form action="" id="formmatchnum">
+          <th colspan="4" class="left">Trận</th>
+          <th colspan="2" class="right" id="dmatchnum">
+            <input type="text" name="matchnum" id="matchnum" />
+          </th>
+          <th><input type="submit" value="save" /></th>
+        </form>
+      </tr>
+      <tr class="head">
+        <td>Điểm làm sạch</td>
+        <td>GT</td>
+        <td>SLĐ</td>
+        <td>SLX</td>
+        <td>Score LMĐ</td>
+        <td>Score LMX</td>
+      </tr>
+      <form action="" id="getdata">
+        <tr>
+          <td>Phân tử nước trong nhà máy lưu trữ nước (cổng lục giác)</td>
+          <td>30</td>
+          <td>
+            <input type="number" name="hexred" id="hexred" />
+          </td>
+          <td>
+            <input type="number" name="hexblue" id="hexblue" />
+          </td>
+          <td id="dhexred"></td>
+          <td id="dhexblue"></td>
+        </tr>
+        <tr>
+          <td>Chất thải trong nhà máy lưu trữ nước</td>
+          <td>-20</td>
+          <td>
+            <input type="number" name="wwastered" id="wwasterred" />
+          </td>
+          <td>
+            <input type="number" name="wwasteblue" id="wwasteblue" />
+          </td>
+          <td id="dwwastered"></td>
+          <td id="dwwasteblue"></td>
+        </tr>
+        <tr>
+          <td>Phân tử nước trong nhà máy lưu trữ nước (cổng tròn)</td>
+          <td>60</td>
+          <td>
+            <input type="number" name="circlered" id="circlered" />
+          </td>
+          <td>
+            <input type="number" name="circleblue" id="circleblue" />
+          </td>
+          <td id="dcirclered"></td>
+          <td id="dcircleblue"></td>
+        </tr>
+        <tr>
+          <td>Chất thải trong nhà máy xử lý chất thải</td>
+          <td>50</td>
+          <td>
+            <input type="number" name="rwastered" id="rwastered" />
+          </td>
+          <td>
+            <input type="number" name="rwasteblue" id="rwasteblue" />
+          </td>
+          <td id="drwastered"></td>
+          <td id="drwasteblue"></td>
+        </tr>
+        <tr>
+          <td>Phân tử nước trong nhà máy xử lý chất thải</td>
+          <td>-30</td>
+          <td>
+            <input type="number" name="wwaterred" id="wwaterred" />
+          </td>
+          <td>
+            <input type="number" name="wwaterblue" id="wwaterblue" />
+          </td>
+          <td id="dwwaterred"></td>
+          <td id="dwwaterblue"></td>
+        </tr>
+        <tr>
+          <td>Chất thải trong nhà máy phân loại bán tự động</td>
+          <td>20</td>
+          <td>
+            <input type="number" name="wastehpred" id="wastehpred" />
+          </td>
+          <td>
+            <input type="number" name="wastehpblue" id="wastehpblue" />
+          </td>
+          <td id="dwastehpred"></td>
+          <td id="dwastehpblue"></td>
+        </tr>
+        <tr>
+          <td>Phân tử nước trong nhà máy bán tự động</td>
+          <td>5</td>
+          <td>
+            <input type="number" name="waterhpred" id="waterhpred" />
+          </td>
+          <td>
+            <input type="number" name="waterhpblue" id="waterhpblue" />
+          </td>
+          <td id="dwaterhpred"></td>
+          <td id="dwaterhpblue"></td>
+        </tr>
+        <tr>
+          <td>Phân tử nước trong xe chứa nước</td>
+          <td>10</td>
+          <td>
+            <input type="number" name="watercarred" id="watercarred" />
+          </td>
+          <td>
+            <input type="number" name="watercarblue" id="watercarblue" />
+          </td>
+          <td id="dwatercarred"></td>
+          <td id="dwatercarblue"></td>
+        </tr>
+        <tr>
+          <td colspan="2">TOTAL ĐIỂM LÀM SẠCH</td>
+          <td id="genumred"></td>
+          <td id="genumblue"></td>
+          <td id="scorered"></td>
+          <td id="scoreblue"></td>
+        </tr>
+        <tr>
+          <td colspan="2">Điểm cộng tác</td>
+          <td></td>
+          <td></td>
+          <td id="dared"></td>
+          <td id="dablue"></td>
+          <td>
+            <input type="submit" value="save" />
+          </td>
+        </tr>
+      </form>
+    </table>
+  </body>
+  <script>
+    var fscorered = 0;
+    var fscoreblue = 0;
+    var penred = 0;
+    var penblue = 0;
+    var redred = 0;
+    var redblue = 0;
+    var red1 = "";
+    var red2 = "";
+    var blue1 = "";
+    var blue2 = "";
+    var multiplierred = 0;
+    var multiplierred = 0;
+    var red1result = [0, 0, 0, 0];
+    var red2result = [0, 0, 0, 0];
+    var blue1result = [0, 0, 0, 0];
+    var blue2result = [0, 0, 0, 0];
+    async function getmatchnum(event) {
+      event.preventDefault();
+      const form = event.currentTarget;
+      try {
+        const formData = new FormData(form);
+        const plainFormData = Object.fromEntries(formData.entries());
+        document.getElementById("dmatchnum").innerHTML = plainFormData.matchnum;
+        display(plainFormData.matchnum);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    async function getdata(event) {
+      event.preventDefault();
+      const matchnum = document.getElementById("dmatchnum").innerHTML;
+      const url = "http://192.168.95.70:3000/pmmatches/" + matchnum;
+      const form = event.currentTarget;
+      try {
+        const formData = new FormData(form);
+        const plainFormData = Object.fromEntries(formData.entries());
+        document.getElementById("dhexred").innerHTML =
+          plainFormData.hexred * 30;
+        document.getElementById("dhexblue").innerHTML =
+          plainFormData.hexblue * 30;
+        document.getElementById("dwwastered").innerHTML =
+          plainFormData.wwastered * -20;
+        document.getElementById("dwwasteblue").innerHTML =
+          plainFormData.wwasteblue * -20;
+        document.getElementById("dcirclered").innerHTML =
+          plainFormData.circlered * 60;
+        document.getElementById("dcircleblue").innerHTML =
+          plainFormData.circleblue * 60;
+        document.getElementById("drwastered").innerHTML =
+          plainFormData.rwastered * 50;
+        document.getElementById("drwasteblue").innerHTML =
+          plainFormData.rwasteblue * 50;
+        document.getElementById("dwwaterred").innerHTML =
+          plainFormData.wwaterred * -30;
+        document.getElementById("dwwaterblue").innerHTML =
+          plainFormData.wwaterblue * -30;
+        document.getElementById("dwastehpred").innerHTML =
+          plainFormData.wastehpred * 20;
+        document.getElementById("dwastehpblue").innerHTML =
+          plainFormData.wastehpblue * 20;
+        document.getElementById("dwaterhpred").innerHTML =
+          plainFormData.waterhpred * 5;
+        document.getElementById("dwaterhpblue").innerHTML =
+          plainFormData.waterhpblue * 5;
+        document.getElementById("dwatercarred").innerHTML =
+          plainFormData.watercarred * 10;
+        document.getElementById("dwatercarblue").innerHTML =
+          plainFormData.watercarblue * 10;
+        const gered =
+          Number(plainFormData.hexred) +
+          Number(plainFormData.wwastered) +
+          Number(plainFormData.circlered) +
+          Number(plainFormData.rwastered) +
+          Number(plainFormData.wwaterred) +
+          Number(plainFormData.wastehpred) +
+          Number(plainFormData.waterhpred) +
+          Number(plainFormData.watercarred);
+        const geblue =
+          Number(plainFormData.hexblue) +
+          Number(plainFormData.wwasteblue) +
+          Number(plainFormData.circleblue) +
+          Number(plainFormData.rwasteblue) +
+          Number(plainFormData.wwaterblue) +
+          Number(plainFormData.wastehpblue) +
+          Number(plainFormData.waterhpblue) +
+          Number(plainFormData.watercarblue);
+        const ge = gered + geblue;
+        document.getElementById("genumred").innerHTML = ge;
+        document.getElementById("genumblue").innerHTML = ge;
+        const scorered =
+          Number(plainFormData.hexred) * 30 +
+          Number(plainFormData.wwastered) * -20 +
+          Number(plainFormData.circlered) * 60 +
+          Number(plainFormData.rwastered) * 50 +
+          Number(plainFormData.wwaterred) * -30 +
+          Number(plainFormData.wastehpred) * 20 +
+          Number(plainFormData.waterhpred) * 5 +
+          Number(plainFormData.watercarred) * 10;
+        const scoreblue =
+          Number(plainFormData.hexblue) * 30 +
+          Number(plainFormData.wwasteblue) * -20 +
+          Number(plainFormData.circleblue) * 60 +
+          Number(plainFormData.rwasteblue) * 50 +
+          Number(plainFormData.wwaterblue) * -30 +
+          Number(plainFormData.wastehpblue) * 20 +
+          Number(plainFormData.waterhpblue) * 5 +
+          Number(plainFormData.watercarblue) * 10;
 
-    <script>
-    async function loadMatch() {
-        try {
-            const matchnum = document.getElementById("matchnum").value;
-            const match = await api.loadPMMatch(matchnum);
-            
-            document.getElementById("redteam1").value = match.redteam1 || '';
-            document.getElementById("redteam2").value = match.redteam2 || '';
-            document.getElementById("scorered").value = match.scorered || '0';
-            document.getElementById("blueteam1").value = match.blueteam1 || '';
-            document.getElementById("blueteam2").value = match.blueteam2 || '';
-            document.getElementById("scoreblue").value = match.scoreblue || '0';
-            
-            document.getElementById("success").textContent = 'Match loaded successfully';
-            document.getElementById("error").textContent = '';
-        } catch (error) {
-            document.getElementById("error").textContent = 'Failed to load match: ' + error.message;
-            document.getElementById("success").textContent = '';
+        document.getElementById("scorered").innerHTML = scorered;
+        document.getElementById("scoreblue").innerHTML = scoreblue;
+        var ascore = 0;
+        if (ge == 240) {
+          document.getElementById("dared").innerHTML = 300;
+          document.getElementById("dablue").innerHTML = 300;
+          ascore = 300;
+        } else if (ge > 135) {
+          document.getElementById("dared").innerHTML = 200;
+          document.getElementById("dablue").innerHTML = 200;
+
+          ascore = 200;
+        } else if (ge > 90) {
+          document.getElementById("dared").innerHTML = 100;
+          document.getElementById("dablue").innerHTML = 100;
+
+          ascore = 100;
+        } else {
+          document.getElementById("dared").innerHTML = 0;
+          document.getElementById("dablue").innerHTML = 0;
+          ascore = 0;
         }
+        const fscorered =
+          ((scorered + ascore) * multiplierred + penblue) * (1 - redred);
+        const fscoreblue =
+          ((scoreblue + ascore) * multiplierblue + penred) * (1 - redblue);
+        formData.append("fscorered", fscorered);
+        formData.append("fscoreblue", fscoreblue);
+        formData.append("scorered", scorered);
+        formData.append("scoreblue", scoreblue);
+        formData.append("ascore", ascore);
+        sendresult(fscorered, fscoreblue, penred, penblue);
+        const newplainFormData = Object.fromEntries(formData.entries());
+        const responseData = await postFormDataAsJson(url, newplainFormData);
+        console.log({ responseData });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    async function postFormDataAsJson(url, data) {
+      const jsondata = JSON.stringify(data);
+      const fetchOptions = {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: jsondata,
+      };
+
+      const response = await fetch(url, fetchOptions);
+
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(errorMessage);
+      }
+
+      return response.json();
+    }
+    function display(matchnum) {
+      const xmlhttp = new XMLHttpRequest();
+      xmlhttp.onload = function () {
+        const plainFormData = JSON.parse(this.responseText);
+        red1 = plainFormData.red1;
+        red2 = plainFormData.red2;
+        blue1 = plainFormData.blue1;
+        blue2 = plainFormData.blue2;
+        multiplierred = parseFloat(plainFormData.multiplierred) * 0.25 + 1;
+        multiplierblue = parseFloat(plainFormData.multiplierblue) * 0.25 + 1;
+        document.getElementById("dhexred").innerHTML =
+          plainFormData.hexred * 30;
+        document.getElementById("dhexblue").innerHTML =
+          plainFormData.hexblue * 30;
+        document.getElementById("dwwastered").innerHTML =
+          plainFormData.wwastered * -20;
+        document.getElementById("dwwasteblue").innerHTML =
+          plainFormData.wwasteblue * -20;
+        document.getElementById("dcirclered").innerHTML =
+          plainFormData.circlered * 60;
+        document.getElementById("dcircleblue").innerHTML =
+          plainFormData.circleblue * 60;
+        document.getElementById("drwastered").innerHTML =
+          plainFormData.rwastered * 50;
+        document.getElementById("drwasteblue").innerHTML =
+          plainFormData.rwasteblue * 50;
+        document.getElementById("dwwaterred").innerHTML =
+          plainFormData.wwaterred * -30;
+        document.getElementById("dwwaterblue").innerHTML =
+          plainFormData.wwaterblue * -30;
+        document.getElementById("dwastehpred").innerHTML =
+          plainFormData.wastehpred * 20;
+        document.getElementById("dwastehpblue").innerHTML =
+          plainFormData.wastehpblue * 20;
+        document.getElementById("dwaterhpred").innerHTML =
+          plainFormData.waterhpred * 5;
+        document.getElementById("dwaterhpblue").innerHTML =
+          plainFormData.waterhpblue * 5;
+        document.getElementById("dwatercarred").innerHTML =
+          plainFormData.watercarred * 10;
+        document.getElementById("dwatercarblue").innerHTML =
+          plainFormData.watercarblue * 10;
+        const gered =
+          Number(plainFormData.hexred) +
+          Number(plainFormData.wwastered) +
+          Number(plainFormData.circlered) +
+          Number(plainFormData.rwastered) +
+          Number(plainFormData.wwaterred) +
+          Number(plainFormData.wastehpred) +
+          Number(plainFormData.waterhpred) +
+          Number(plainFormData.watercarred);
+        const geblue =
+          Number(plainFormData.hexblue) +
+          Number(plainFormData.wwasteblue) +
+          Number(plainFormData.circleblue) +
+          Number(plainFormData.rwasteblue) +
+          Number(plainFormData.wwaterblue) +
+          Number(plainFormData.wastehpblue) +
+          Number(plainFormData.waterhpblue) +
+          Number(plainFormData.watercarblue);
+        document.getElementById("genumred").innerHTML = gered;
+        document.getElementById("genumblue").innerHTML = geblue;
+        const scorered =
+          Number(plainFormData.hexred) * 30 +
+          Number(plainFormData.wwastered) * -20 +
+          Number(plainFormData.circlered) * 60 +
+          Number(plainFormData.rwastered) * 50 +
+          Number(plainFormData.wwaterred) * -30 +
+          Number(plainFormData.wastehpred) * 20 +
+          Number(plainFormData.waterhpred) * 5 +
+          Number(plainFormData.watercarred) * 10;
+        const scoreblue =
+          Number(plainFormData.hexblue) * 30 +
+          Number(plainFormData.wwasteblue) * -20 +
+          Number(plainFormData.circleblue) * 60 +
+          Number(plainFormData.rwasteblue) * 50 +
+          Number(plainFormData.wwaterblue) * -30 +
+          Number(plainFormData.wastehpblue) * 20 +
+          Number(plainFormData.waterhpblue) * 5 +
+          Number(plainFormData.watercarblue) * 10;
+        penred =
+          Number(plainFormData.yelred) * 20 + Number(plainFormData.penred) * 10;
+        penblue =
+          Number(plainFormData.yelblue) * 20 +
+          Number(plainFormData.penblue) * 10;
+        redred = Number(plainFormData.redred);
+        redblue = Number(plainFormData.redblue);
+        document.getElementById("scorered").innerHTML = scorered;
+        document.getElementById("scoreblue").innerHTML = scoreblue;
+        var ascorered = 0;
+        var ascoreblue = 0;
+        if (gered == 240) {
+          document.getElementById("dared").innerHTML = 300;
+          ascorered = 300;
+        } else if (gered > 135) {
+          document.getElementById("dared").innerHTML = 200;
+          ascoreblue = 200;
+        } else if (gered > 90) {
+          document.getElementById("dared").innerHTML = 100;
+          ascorered = 100;
+        } else {
+          document.getElementById("dared").innerHTML = 0;
+        }
+        if (geblue == 240) {
+          document.getElementById("dablue").innerHTML = 300;
+          ascoreblue = 300;
+        } else if (geblue > 135) {
+          document.getElementById("dablue").innerHTML = 200;
+          ascoreblue = 200;
+        } else if (geblue > 90) {
+          document.getElementById("dablue").innerHTML = 100;
+          ascoreblue = 100;
+        } else {
+          document.getElementById("dablue").innerHTML = 0;
+        }
+        getresultred1();
+        getresultred2();
+        getresultblue1();
+        getresultblue2();
+      };
+      xmlhttp.open("GET", "http://192.168.95.70:3000/pmmatches/" + matchnum);
+      xmlhttp.send();
+    }
+    async function sendresult(fscorered, fscoreblue, penred, penblue) {
+      let totalred1 = red1result[1] * red1result[3];
+      red1result[3] = red1result[3] + 1;
+      red1result[2] = red1result[2] + penred;
+      red1result[1] = (totalred1 + fscorered) / red1result[3];
+
+      let totalred2 = red2result[1] * red2result[3];
+      red2result[3] = red2result[3] + 1;
+      red2result[2] = red2result[2] + penred;
+      red2result[1] = (totalred2 + fscorered) / red2result[3];
+
+      let totalblue1 = blue1result[1] * blue1result[3];
+      blue1result[3] = blue1result[3] + 1;
+      blue1result[2] = blue1result[2] + penblue;
+      blue1result[1] = (totalblue1 + fscoreblue) / blue1result[3];
+
+      let totalblue2 = blue2result[1] * blue2result[3];
+      blue2result[3] = blue2result[3] + 1;
+      blue2result[2] = blue2result[2] + penblue;
+      blue2result[1] = (totalblue2 + fscoreblue) / blue2result[3];
+      if (fscorered > fscoreblue) {
+        red1result[0] = red1result[0] + 2;
+        red2result[0] = red2result[0] + 2;
+      } else if (fscorered == fscoreblue) {
+        red1result[0] = red1result[0] + 1;
+        red2result[0] = red2result[0] + 1;
+        blue1result[0] = blue1result[0] + 1;
+        blue2result[0] = blue2result[0] + 1;
+      } else {
+        blue1result[0] = blue1result[0] + 2;
+        blue2result[0] = blue2result[0] + 2;
+      }
+      console.log("new:" + red1result);
+      try {
+        const responseData = await postFormDataAsJson(
+          "http://192.168.95.70:3000/results/" + red1,
+          {
+            rp: red1result[0],
+            avg: red1result[1],
+            pen: red1result[2],
+            matchplayed: red1result[3],
+          }
+        );
+        const responseData2 = await postFormDataAsJson(
+          "http://192.168.95.70:3000/results/" + red2,
+          {
+            rp: red2result[0],
+            avg: red2result[1],
+            pen: red2result[2],
+            matchplayed: red2result[3],
+          }
+        );
+        const responseData3 = await postFormDataAsJson(
+          "http://192.168.95.70:3000/results/" + blue1,
+          {
+            rp: blue1result[0],
+            avg: blue1result[1],
+            pen: blue1result[2],
+            matchplayed: blue1result[3],
+          }
+        );
+        const responseData4 = await postFormDataAsJson(
+          "http://192.168.95.70:3000/results/" + blue2,
+          {
+            rp: blue2result[0],
+            avg: blue2result[1],
+            pen: blue2result[2],
+            matchplayed: blue2result[3],
+          }
+        );
+
+        console.log(responseData);
+        console.log(responseData2);
+        console.log(responseData3);
+        console.log(responseData4);
+      } catch (error) {
+        console.error(error);
+      }
     }
 
-    async function saveMatch() {
-        try {
-            const matchData = {
-                id: document.getElementById("matchnum").value,
-                redteam1: document.getElementById("redteam1").value,
-                redteam2: document.getElementById("redteam2").value,
-                scorered: document.getElementById("scorered").value,
-                blueteam1: document.getElementById("blueteam1").value,
-                blueteam2: document.getElementById("blueteam2").value,
-                scoreblue: document.getElementById("scoreblue").value
-            };
-            
-            await api.savePMMatch(matchData);
-            document.getElementById("success").textContent = 'Match saved successfully';
-            document.getElementById("error").textContent = '';
-        } catch (error) {
-            document.getElementById("error").textContent = 'Failed to save match: ' + error.message;
-            document.getElementById("success").textContent = '';
-        }
-    }
-    </script>
+    function getresultred1() {
+      const xmlhttp2 = new XMLHttpRequest();
+      const url = "http://192.168.95.70:3000/results/" + red1;
+      xmlhttp2.onload = function () {
+        const plainData = JSON.parse(this.responseText);
+        console.log(plainData.rp);
+        console.log(url);
 
-</body>
+        red1result[0] = Number(plainData.rp);
+        red1result[1] = Number(plainData.avg);
+        red1result[2] = Number(plainData.pen);
+        red1result[3] = Number(plainData.matchplayed);
+        console.log("func" + red1result);
+      };
+      xmlhttp2.open("GET", url);
+      xmlhttp2.send();
+    }
+    function getresultred2() {
+      const xmlhttp3 = new XMLHttpRequest();
+      xmlhttp3.onload = function () {
+        const plainData = JSON.parse(this.responseText);
+        red2result[0] = plainData.rp;
+        red2result[1] = plainData.avg;
+        red2result[2] = plainData.pen;
+        red2result[3] = plainData.matchplayed;
+      };
+      xmlhttp3.open("GET", "http://192.168.95.70:3000/results/" + red2);
+      xmlhttp3.send();
+    }
+    function getresultblue1(teamname) {
+      const xmlhttp4 = new XMLHttpRequest();
+      xmlhttp4.onload = function () {
+        const plainData = JSON.parse(this.responseText);
+        blue1result[0] = plainData.rp;
+        blue1result[1] = plainData.avg;
+        blue1result[2] = plainData.pen;
+        blue1result[3] = plainData.matchplayed;
+      };
+      xmlhttp4.open("GET", "http://192.168.95.70:3000/results/" + blue1);
+      xmlhttp4.send();
+    }
+    function getresultblue2(teamname) {
+      const xmlhttp5 = new XMLHttpRequest();
+      xmlhttp5.onload = function () {
+        const plainData = JSON.parse(this.responseText);
+        blue2result[0] = plainData.rp;
+        blue2result[1] = plainData.avg;
+        blue2result[2] = plainData.pen;
+        blue2result[3] = plainData.matchplayed;
+      };
+      xmlhttp5.open("GET", "http://192.168.95.70:3000/results/" + blue2);
+      xmlhttp5.send();
+    }
+    const Form1 = document.getElementById("formmatchnum");
+    Form1.addEventListener("submit", getmatchnum);
+    const Form2 = document.getElementById("getdata");
+    Form2.addEventListener("submit", getdata);
+  </script>
 </html>

@@ -1,71 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-<style>
-h1 {
-        font-family:'Noto Sans';
-        margin-top: 10px;
-        font-size: 42px;
-        text-align: center;
-        color: #A50C0C;
-        font-weight: bold;
+  <style>
+    h1 {
+      font-family: "Noto Sans";
+      margin-top: 10px;
+      font-size: 42px;
+      text-align: center;
+      color: #a50c0c;
+      font-weight: bold;
     }
-th {
-    font-family: 'Noto Sans';
-    font-size: 24px;
-    text-align: center;
-    font-weight: bold;
-    color: #A50C0C;
-    border-width: 2px;
-    
-    
-}
-tr{
-    width: 1000px;
-}
-td {
-    font-family: 'Noto Sans';
-    font-size: 21px;
-    text-align: center;
-    border-width: 2px;
-}
-table {
-    border-collapse: collapse;
-    margin-left: auto;
-    margin-right: auto;
-}
-.tnum {
-    width: 200px;
-}
-.tname {
-    width: 300px;
-}
-.tcode {
-    width: 300px;
-}
-</style>
-<body>
-  
+    th {
+      font-family: "Noto Sans";
+      font-size: 24px;
+      text-align: center;
+      font-weight: bold;
+      color: #a50c0c;
+      border-width: 2px;
+    }
+    tr {
+      width: 1000px;
+    }
+    td {
+      font-family: "Noto Sans";
+      font-size: 21px;
+      text-align: center;
+      border-width: 2px;
+    }
+    table {
+      border-collapse: collapse;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .tnum {
+      width: 200px;
+    }
+    .tname {
+      width: 300px;
+    }
+    .tcode {
+      width: 300px;
+    }
+  </style>
+  <body>
+    <h1>UVRC - PO TEAM LIST</h1>
 
-<h1>UVRC - PO TEAM LIST</h1>
+    <p id="demo"></p>
 
-<p id="demo"></p>
-
-<script>
-const xmlhttp = new XMLHttpRequest();
-xmlhttp.onload = function() {
-  const myObj = JSON.parse(this.responseText);
-  let text = "<table border='white'><tr><th class='tnum'>Alliances #</th><th class='tname'>TEAM 1</th><th class='tcode'>TEAM 2</th></tr>";
-  for (let x in myObj){
-    text += "<tr><td>" + (parseInt(myObj[x].id) +1) + "</td><td>" + myObj[x].team1 + "</td><td>" + myObj[x].team2 +"</td></tr>";
-  }
-  text += "</table>" 
-  document.getElementById("demo").innerHTML = text;
-  console.log(myObj)
-}
-xmlhttp.open("GET", "http://localhost:3000/poteams");
-xmlhttp.send();
-
-</script>
-
-</body>
+    <script>
+      const xmlhttp = new XMLHttpRequest();
+      xmlhttp.onload = function () {
+        const myObj = JSON.parse(this.responseText);
+        let text =
+          "<table border='white'><tr><th class='tnum'>Alliances #</th><th class='tname'>TEAM 1</th><th class='tcode'>TEAM 2</th></tr>";
+        for (let x in myObj) {
+          text +=
+            "<tr><td>" +
+            (parseInt(myObj[x].id) + 1) +
+            "</td><td>" +
+            myObj[x].team1 +
+            "</td><td>" +
+            myObj[x].team2 +
+            "</td></tr>";
+        }
+        text += "</table>";
+        document.getElementById("demo").innerHTML = text;
+        console.log(myObj);
+      };
+      xmlhttp.open("GET", "http://192.168.95.70:3000/poteams");
+      xmlhttp.send();
+    </script>
+  </body>
 </html>

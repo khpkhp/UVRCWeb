@@ -1,150 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UVRC - PM Results</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        h1 {
-            font-family: 'Noto Sans';
-            margin-top: 10px;
-            font-size: 42px;
-            text-align: center;
-            color: #A50C0C;
-            font-weight: bold;
-        }
-        th {
-            font-family: 'Noto Sans';
-            font-size: 24px;
-            text-align: center;
-            font-weight: bold;
-            color: #A50C0C;
-            border-width: 2px;
-        }
-        tr {
-            width: 1000px;
-        }
-        td {
-            font-family: 'Noto Sans';
-            font-size: 21px;
-            text-align: center;
-            border-width: 2px;
-            padding: 10px;
-        }
-        table {
-            border-collapse: collapse;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .code {
-            width: 200px;
-            padding: 20px;
-        }
-        .tname {
-            width: 150px;
-        }
-        .aname {
-            width: 200px;
-        }
-        #loading {
-            text-align: center;
-            font-family: 'Noto Sans';
-            color: #666;
-            display: none;
-        }
-        #error {
-            text-align: center;
-            font-family: 'Noto Sans';
-            color: #A50C0C;
-            margin: 20px;
-        }
-    </style>
-</head>
-<body>
+  <style>
+    h1 {
+      font-family: "Noto Sans";
+      margin-top: 10px;
+      font-size: 42px;
+      text-align: center;
+      color: #a50c0c;
+      font-weight: bold;
+    }
+    th {
+      font-family: "Noto Sans";
+      font-size: 24px;
+      text-align: center;
+      font-weight: bold;
+      color: #a50c0c;
+      border-width: 2px;
+    }
+    tr {
+      width: 1000px;
+    }
+    td {
+      font-family: "Noto Sans";
+      font-size: 21px;
+      text-align: center;
+      border-width: 2px;
+      padding: 10px;
+    }
+    table {
+      border-collapse: collapse;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .code {
+      width: 200px;
+      padding: 20px;
+    }
+    .tname {
+      width: 150px;
+    }
+    .aname {
+      width: 200px;
+    }
+  </style>
+  <body>
     <h1>UVRC - PM Results</h1>
-    <div id="loading">Loading matches...</div>
-    <div id="error"></div>
-    <div id="results"></div>
 
-    <script src="js/config.js"></script>
-    <script src="js/api.js"></script>
+    <p id="demo"></p>
+
     <script>
-    async function loadPMResults() {
-        try {
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('error').textContent = '';
-            
-            const matches = await api.loadPMMatches();
-            let html = `
-                <table border='white'>
-                    <tr>
-                        <th class='code'>PM No.</th>
-                        <th class='tname'>R1</th>
-                        <th class='tname'>R2</th>
-                        <th class='tname'>B1</th>
-                        <th class='tname'>B2</th>
-                        <th class='aname'>Red Score</th>
-                        <th class='aname'>Blue Score</th>
-                    </tr>
-            `;
-            
-            // Sort matches by match number
-            matches.sort((a, b) => {
-                const numA = parseInt(a.id.replace('PM', ''));
-                const numB = parseInt(b.id.replace('PM', ''));
-                return numA - numB;
-            });
-
-            matches.forEach(match => {
-                const redScore = calculateScore(match, 'red');
-                const blueScore = calculateScore(match, 'blue');
-                
-                html += `
-                    <tr>
-                        <td>${match.id}</td>
-                        <td>${match.red1 || '-'}</td>
-                        <td>${match.red2 || '-'}</td>
-                        <td>${match.blue1 || '-'}</td>
-                        <td>${match.blue2 || '-'}</td>
-                        <td>${Math.round(redScore)}</td>
-                        <td>${Math.round(blueScore)}</td>
-                    </tr>
-                `;
-            });
-            
-            html += '</table>';
-            document.getElementById('results').innerHTML = html;
-        } catch (error) {
-            document.getElementById('error').textContent = 'Failed to load matches: ' + error.message;
-        } finally {
-            document.getElementById('loading').style.display = 'none';
+      const xmlhttp = new XMLHttpRequest();
+      xmlhttp.onload = function () {
+        const myObj = JSON.parse(this.responseText);
+        let text =
+          "<table border='white'><tr><th class='code'>PM No.</th><th class='tname'>R1</th><th class='tname'>R2</th><th class='tname'>B1</th><th class='tname'>B2</th><th class='aname'>SR</th><th class='aname'>SB</th></tr>";
+        for (x in myObj) {
+          let SR =
+            parseFloat(myObj[x].scorered) * parseFloat(myObj[x].multiplierred) +
+            parseFloat(myObj[x].ascore) +
+            parseFloat(myObj[x].penblue) * 10 +
+            parseFloat(myObj[x].yelblue) * 20;
+          let SB =
+            parseFloat(myObj[x].scoreblue) *
+              parseFloat(myObj[x].multiplierblue) +
+            parseFloat(myObj[x].ascore) +
+            parseFloat(myObj[x].penred) * 10 +
+            parseFloat(myObj[x].yelred) * 20;
+          console.log(SB);
+          text +=
+            "<tr><td>" +
+            myObj[x].id +
+            "</td><td>" +
+            myObj[x].red1 +
+            "</td><td>" +
+            myObj[x].red2 +
+            "</td><td>" +
+            myObj[x].blue1 +
+            "</td><td>" +
+            myObj[x].blue2 +
+            "</td><td>" +
+            Math.round(SR) +
+            "</td><td>" +
+            Math.round(SB) +
+            "</td></tr>";
         }
-    }
-
-    function calculateScore(match, alliance) {
-        if (!match) return 0;
-        
-        const scoreField = 'score' + alliance;
-        const multiplierField = 'multiplier' + alliance;
-        const oppositeAlliance = alliance === 'red' ? 'blue' : 'red';
-        
-        let score = parseFloat(match[scoreField] || 0) * parseFloat(match[multiplierField] || 1);
-        
-        // Add autonomous score if applicable
-        if (match.ascore) {
-            score += parseFloat(match.ascore);
-        }
-        
-        // Add penalties from opposite team
-        score += (parseFloat(match['pen' + oppositeAlliance] || 0) * 10);
-        score += (parseFloat(match['yel' + oppositeAlliance] || 0) * 20);
-        
-        return score;
-    }
-
-    // Load results when page loads
-    loadPMResults();
+        text += "</table>";
+        document.getElementById("demo").innerHTML = text;
+        console.log(myObj);
+      };
+      xmlhttp.open("GET", "http://192.168.95.70:3000/pmmatches");
+      xmlhttp.send();
     </script>
-</body>
+  </body>
 </html>
