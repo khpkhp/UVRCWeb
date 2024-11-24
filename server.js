@@ -22,7 +22,7 @@ server.use(cors({
         'http://localhost:5000',
         'http://127.0.0.1:5000',
         'https://khpkhp.github.io/UVRCWeb',
-        /\.vercel\.app$/
+        /\.github\.io$/
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
