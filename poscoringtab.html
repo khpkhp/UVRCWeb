@@ -295,24 +295,20 @@
           Number(plainFormData.wastehpblue) * 20 +
           Number(plainFormData.waterhpblue) * 5 +
           Number(plainFormData.watercarblue) * 10;
-        const fscorered = (scorered * multiplierred + penblue) * (1 - redred);
-        const fscoreblue =
-          (scoreblue * multiplierblue + penred) * (1 - redblue);
-        console.log(redred, redblue, fscoreblue, fscorered);
-        winneradvance(fscorered, fscoreblue);
+        
         document.getElementById("scorered").innerHTML = scorered;
         document.getElementById("scoreblue").innerHTML = scoreblue;
         var ascore = 0;
-        if (ge == 240) {
+        if (ge == 160) {
           document.getElementById("dared").innerHTML = 300;
           document.getElementById("dablue").innerHTML = 300;
           ascore = 300;
-        } else if (ge > 135) {
+        } else if (ge > 90) {
           document.getElementById("dared").innerHTML = 200;
           document.getElementById("dablue").innerHTML = 200;
 
           ascore = 200;
-        } else if (ge > 90) {
+        } else if (ge > 60) {
           document.getElementById("dared").innerHTML = 100;
           document.getElementById("dablue").innerHTML = 100;
 
@@ -322,10 +318,18 @@
           document.getElementById("dablue").innerHTML = 0;
           ascore = 0;
         }
-
+        const fscorered = ((scorered + ascore) * multiplierred + penblue) * (1 - redred);
+        const fscoreblue =
+          ((scoreblue + ascore) * multiplierblue + penred) * (1 - redblue);
+        console.log(redred, redblue, fscoreblue, fscorered);
+        winneradvance(fscorered, fscoreblue);
         formData.append("scorered", scorered);
         formData.append("scoreblue", scoreblue);
         formData.append("ascore", ascore);
+        formData.append("fscorered", fscorered);
+        formData.append("fscoreblue", fscoreblue);
+        formData.append("ascore", ascore);
+        
 
         const newplainFormData = Object.fromEntries(formData.entries());
         const responseData = await postFormDataAsJson(url, newplainFormData);
@@ -450,25 +454,26 @@
         document.getElementById("scoreblue").innerHTML = scoreblue;
         var ascorered = 0;
         var ascoreblue = 0;
-        if (gered == 240) {
+        const ge = gered + geblue;
+        if (ge == 160) {
           document.getElementById("dared").innerHTML = 300;
           ascorered = 300;
-        } else if (gered > 135) {
+        } else if (ge > 90) {
           document.getElementById("dared").innerHTML = 200;
           ascoreblue = 200;
-        } else if (gered > 90) {
+        } else if (ge > 60) {
           document.getElementById("dared").innerHTML = 100;
           ascorered = 100;
         } else {
           document.getElementById("dared").innerHTML = 0;
         }
-        if (geblue == 240) {
+        if (ge == 160) {
           document.getElementById("dablue").innerHTML = 300;
           ascoreblue = 300;
-        } else if (geblue > 135) {
+        } else if (ge > 90) {
           document.getElementById("dablue").innerHTML = 200;
           ascoreblue = 200;
-        } else if (geblue > 90) {
+        } else if (ge > 60) {
           document.getElementById("dablue").innerHTML = 100;
           ascoreblue = 100;
         } else {

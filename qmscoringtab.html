@@ -190,6 +190,22 @@
     </table>
   </body>
   <script>
+    var fscorered = 0;
+    var fscoreblue = 0;
+    var penred = 0;
+    var penblue = 0;
+    var redred = 0;
+    var redblue = 0;
+    var red1 = "";
+    var red2 = "";
+    var blue1 = "";
+    var blue2 = "";
+    var multiplierred = 0;
+    var multiplierred = 0;
+    var red1result = [0, 0, 0, 0];
+    var red2result = [0, 0, 0, 0];
+    var blue1result = [0, 0, 0, 0];
+    var blue2result = [0, 0, 0, 0];
     async function getmatchnum(event) {
       event.preventDefault();
       const form = event.currentTarget;
@@ -197,7 +213,6 @@
         const formData = new FormData(form);
         const plainFormData = Object.fromEntries(formData.entries());
         document.getElementById("dmatchnum").innerHTML = plainFormData.matchnum;
-        console.log(plainFormData);
         display(plainFormData.matchnum);
       } catch (error) {
         console.error(error);
@@ -211,7 +226,6 @@
       try {
         const formData = new FormData(form);
         const plainFormData = Object.fromEntries(formData.entries());
-        console.log(plainFormData);
         document.getElementById("dhexred").innerHTML =
           plainFormData.hexred * 30;
         document.getElementById("dhexblue").innerHTML =
@@ -283,19 +297,20 @@
           Number(plainFormData.wastehpblue) * 20 +
           Number(plainFormData.waterhpblue) * 5 +
           Number(plainFormData.watercarblue) * 10;
+
         document.getElementById("scorered").innerHTML = scorered;
         document.getElementById("scoreblue").innerHTML = scoreblue;
         var ascore = 0;
-        if (ge == 240) {
+        if (ge == 160) {
           document.getElementById("dared").innerHTML = 300;
           document.getElementById("dablue").innerHTML = 300;
           ascore = 300;
-        } else if (ge > 135) {
+        } else if (ge > 120) {
           document.getElementById("dared").innerHTML = 200;
           document.getElementById("dablue").innerHTML = 200;
 
           ascore = 200;
-        } else if (ge > 90) {
+        } else if (ge > 60) {
           document.getElementById("dared").innerHTML = 100;
           document.getElementById("dablue").innerHTML = 100;
 
@@ -305,11 +320,16 @@
           document.getElementById("dablue").innerHTML = 0;
           ascore = 0;
         }
-
+        const fscorered =
+          ((scorered + ascore) * multiplierred + penblue) * (1 - redred);
+        const fscoreblue =
+          ((scoreblue + ascore) * multiplierblue + penred) * (1 - redblue);
+        formData.append("fscorered", fscorered);
+        formData.append("fscoreblue", fscoreblue);
         formData.append("scorered", scorered);
         formData.append("scoreblue", scoreblue);
         formData.append("ascore", ascore);
-
+        sendresult(fscorered, fscoreblue, penred, penblue);
         const newplainFormData = Object.fromEntries(formData.entries());
         const responseData = await postFormDataAsJson(url, newplainFormData);
         console.log({ responseData });
@@ -319,7 +339,6 @@
     }
     async function postFormDataAsJson(url, data) {
       const jsondata = JSON.stringify(data);
-      console.log(data);
       const fetchOptions = {
         method: "PATCH",
         headers: {
@@ -342,7 +361,12 @@
       const xmlhttp = new XMLHttpRequest();
       xmlhttp.onload = function () {
         const plainFormData = JSON.parse(this.responseText);
-        console.log(plainFormData);
+        red1 = plainFormData.red1;
+        red2 = plainFormData.red2;
+        blue1 = plainFormData.blue1;
+        blue2 = plainFormData.blue2;
+        multiplierred = parseFloat(plainFormData.multiplierred) * 0.25 + 1;
+        multiplierblue = parseFloat(plainFormData.multiplierblue) * 0.25 + 1;
         document.getElementById("dhexred").innerHTML =
           plainFormData.hexred * 30;
         document.getElementById("dhexblue").innerHTML =
@@ -413,39 +437,182 @@
           Number(plainFormData.wastehpblue) * 20 +
           Number(plainFormData.waterhpblue) * 5 +
           Number(plainFormData.watercarblue) * 10;
+        penred =
+          Number(plainFormData.yelred) * 20 + Number(plainFormData.penred) * 10;
+        penblue =
+          Number(plainFormData.yelblue) * 20 +
+          Number(plainFormData.penblue) * 10;
+        redred = Number(plainFormData.redred);
+        redblue = Number(plainFormData.redblue);
         document.getElementById("scorered").innerHTML = scorered;
         document.getElementById("scoreblue").innerHTML = scoreblue;
         var ascorered = 0;
         var ascoreblue = 0;
-        if (gered == 240) {
+        if (gered == 160) {
           document.getElementById("dared").innerHTML = 300;
           ascorered = 300;
-        } else if (gered > 135) {
+        } else if (gered > 120) {
           document.getElementById("dared").innerHTML = 200;
           ascoreblue = 200;
-        } else if (gered > 90) {
+        } else if (gered > 60) {
           document.getElementById("dared").innerHTML = 100;
           ascorered = 100;
         } else {
           document.getElementById("dared").innerHTML = 0;
         }
-        if (geblue == 240) {
+        if (geblue == 160) {
           document.getElementById("dablue").innerHTML = 300;
           ascoreblue = 300;
-        } else if (geblue > 135) {
+        } else if (geblue > 90) {
           document.getElementById("dablue").innerHTML = 200;
           ascoreblue = 200;
-        } else if (geblue > 90) {
+        } else if (geblue > 60) {
           document.getElementById("dablue").innerHTML = 100;
           ascoreblue = 100;
         } else {
           document.getElementById("dablue").innerHTML = 0;
         }
+        getresultred1();
+        getresultred2();
+        getresultblue1();
+        getresultblue2();
       };
       xmlhttp.open("GET", "http://192.168.95.70:3000/qmmatches/" + matchnum);
       xmlhttp.send();
     }
+    async function sendresult(fscorered, fscoreblue, penred, penblue) {
+      let totalred1 = red1result[1] * red1result[3];
+      red1result[3] = red1result[3] + 1;
+      red1result[2] = red1result[2] + penred;
+      red1result[1] = (totalred1 + fscorered) / red1result[3];
 
+      let totalred2 = red2result[1] * red2result[3];
+      red2result[3] = red2result[3] + 1;
+      red2result[2] = red2result[2] + penred;
+      red2result[1] = (totalred2 + fscorered) / red2result[3];
+
+      let totalblue1 = blue1result[1] * blue1result[3];
+      blue1result[3] = blue1result[3] + 1;
+      blue1result[2] = blue1result[2] + penblue;
+      blue1result[1] = (totalblue1 + fscoreblue) / blue1result[3];
+
+      let totalblue2 = blue2result[1] * blue2result[3];
+      blue2result[3] = blue2result[3] + 1;
+      blue2result[2] = blue2result[2] + penblue;
+      blue2result[1] = (totalblue2 + fscoreblue) / blue2result[3];
+      if (fscorered > fscoreblue) {
+        red1result[0] = red1result[0] + 2;
+        red2result[0] = red2result[0] + 2;
+      } else if (fscorered == fscoreblue) {
+        red1result[0] = red1result[0] + 1;
+        red2result[0] = red2result[0] + 1;
+        blue1result[0] = blue1result[0] + 1;
+        blue2result[0] = blue2result[0] + 1;
+      } else {
+        blue1result[0] = blue1result[0] + 2;
+        blue2result[0] = blue2result[0] + 2;
+      }
+      console.log("new:" + red1result);
+      try {
+        const responseData = await postFormDataAsJson(
+          "http://192.168.95.70:3000/results/" + red1,
+          {
+            rp: red1result[0],
+            avg: red1result[1],
+            pen: red1result[2],
+            matchplayed: red1result[3],
+          }
+        );
+        const responseData2 = await postFormDataAsJson(
+          "http://192.168.95.70:3000/results/" + red2,
+          {
+            rp: red2result[0],
+            avg: red2result[1],
+            pen: red2result[2],
+            matchplayed: red2result[3],
+          }
+        );
+        const responseData3 = await postFormDataAsJson(
+          "http://192.168.95.70:3000/results/" + blue1,
+          {
+            rp: blue1result[0],
+            avg: blue1result[1],
+            pen: blue1result[2],
+            matchplayed: blue1result[3],
+          }
+        );
+        const responseData4 = await postFormDataAsJson(
+          "http://192.168.95.70:3000/results/" + blue2,
+          {
+            rp: blue2result[0],
+            avg: blue2result[1],
+            pen: blue2result[2],
+            matchplayed: blue2result[3],
+          }
+        );
+
+        console.log(responseData);
+        console.log(responseData2);
+        console.log(responseData3);
+        console.log(responseData4);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    function getresultred1() {
+      const xmlhttp2 = new XMLHttpRequest();
+      const url = "http://192.168.95.70:3000/results/" + red1;
+      xmlhttp2.onload = function () {
+        const plainData = JSON.parse(this.responseText);
+        console.log(plainData.rp);
+        console.log(url);
+
+        red1result[0] = Number(plainData.rp);
+        red1result[1] = Number(plainData.avg);
+        red1result[2] = Number(plainData.pen);
+        red1result[3] = Number(plainData.matchplayed);
+        console.log("func" + red1result);
+      };
+      xmlhttp2.open("GET", url);
+      xmlhttp2.send();
+    }
+    function getresultred2() {
+      const xmlhttp3 = new XMLHttpRequest();
+      xmlhttp3.onload = function () {
+        const plainData = JSON.parse(this.responseText);
+        red2result[0] = plainData.rp;
+        red2result[1] = plainData.avg;
+        red2result[2] = plainData.pen;
+        red2result[3] = plainData.matchplayed;
+      };
+      xmlhttp3.open("GET", "http://192.168.95.70:3000/results/" + red2);
+      xmlhttp3.send();
+    }
+    function getresultblue1(teamname) {
+      const xmlhttp4 = new XMLHttpRequest();
+      xmlhttp4.onload = function () {
+        const plainData = JSON.parse(this.responseText);
+        blue1result[0] = plainData.rp;
+        blue1result[1] = plainData.avg;
+        blue1result[2] = plainData.pen;
+        blue1result[3] = plainData.matchplayed;
+      };
+      xmlhttp4.open("GET", "http://192.168.95.70:3000/results/" + blue1);
+      xmlhttp4.send();
+    }
+    function getresultblue2(teamname) {
+      const xmlhttp5 = new XMLHttpRequest();
+      xmlhttp5.onload = function () {
+        const plainData = JSON.parse(this.responseText);
+        blue2result[0] = plainData.rp;
+        blue2result[1] = plainData.avg;
+        blue2result[2] = plainData.pen;
+        blue2result[3] = plainData.matchplayed;
+      };
+      xmlhttp5.open("GET", "http://192.168.95.70:3000/results/" + blue2);
+      xmlhttp5.send();
+    }
     const Form1 = document.getElementById("formmatchnum");
     Form1.addEventListener("submit", getmatchnum);
     const Form2 = document.getElementById("getdata");

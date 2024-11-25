@@ -53,7 +53,7 @@
     }
   </style>
   <body>
-    <h1>UVRC - PM SCORING TAB</h1>
+    <h1>UVRC - QM SCORING TAB</h1>
     <table>
       <tr>
         <form action="" id="formmatchnum">
@@ -301,16 +301,16 @@
         document.getElementById("scorered").innerHTML = scorered;
         document.getElementById("scoreblue").innerHTML = scoreblue;
         var ascore = 0;
-        if (ge == 240) {
+        if (ge == 160) {
           document.getElementById("dared").innerHTML = 300;
           document.getElementById("dablue").innerHTML = 300;
           ascore = 300;
-        } else if (ge > 135) {
+        } else if (ge > 120) {
           document.getElementById("dared").innerHTML = 200;
           document.getElementById("dablue").innerHTML = 200;
 
           ascore = 200;
-        } else if (ge > 90) {
+        } else if (ge > 60) {
           document.getElementById("dared").innerHTML = 100;
           document.getElementById("dablue").innerHTML = 100;
 
@@ -448,25 +448,25 @@
         document.getElementById("scoreblue").innerHTML = scoreblue;
         var ascorered = 0;
         var ascoreblue = 0;
-        if (gered == 240) {
+        if (gered == 160) {
           document.getElementById("dared").innerHTML = 300;
           ascorered = 300;
-        } else if (gered > 135) {
+        } else if (gered > 120) {
           document.getElementById("dared").innerHTML = 200;
           ascoreblue = 200;
-        } else if (gered > 90) {
+        } else if (gered > 60) {
           document.getElementById("dared").innerHTML = 100;
           ascorered = 100;
         } else {
           document.getElementById("dared").innerHTML = 0;
         }
-        if (geblue == 240) {
+        if (geblue == 160) {
           document.getElementById("dablue").innerHTML = 300;
           ascoreblue = 300;
-        } else if (geblue > 135) {
+        } else if (geblue > 90) {
           document.getElementById("dablue").innerHTML = 200;
           ascoreblue = 200;
-        } else if (geblue > 90) {
+        } else if (geblue > 60) {
           document.getElementById("dablue").innerHTML = 100;
           ascoreblue = 100;
         } else {

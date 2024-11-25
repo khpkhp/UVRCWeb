@@ -56,16 +56,9 @@
           "<table border='white'><tr><th class='code'>PM No.</th><th colspan='2' class='tname'>Red Alliance</th><th class='tname' colspan='2'>Blue Alliance</th><th class='aname'>SR</th><th class='aname'>SB</th></tr>";
         for (x in myObj) {
           let SR =
-            parseFloat(myObj[x].scorered) * parseFloat(myObj[x].multiplierred) +
-            parseFloat(myObj[x].ascore) +
-            parseFloat(myObj[x].penblue) * 10 +
-            parseFloat(myObj[x].yelblue) * 20;
+            Number(myObj[x].fscorered);
           let SB =
-            parseFloat(myObj[x].scoreblue) *
-              parseFloat(myObj[x].multiplierblue) +
-            parseFloat(myObj[x].ascore) +
-            parseFloat(myObj[x].penred) * 10 +
-            parseFloat(myObj[x].yelred) * 20;
+            Number(myObj[x].fscoreblue);
           console.log(SB);
           text +=
             "<tr><td>" +
