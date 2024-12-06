@@ -44,7 +44,7 @@
     }
   </style>
   <body>
-    <h1>UVRC - PM Results</h1>
+    <h1>UVRC - Playoff Results</h1>
 
     <p id="demo"></p>
 
@@ -53,19 +53,10 @@
       xmlhttp.onload = function () {
         const myObj = JSON.parse(this.responseText);
         let text =
-          "<table border='white'><tr><th class='code'>PM No.</th><th class='tname'>R1</th><th class='tname'>R2</th><th class='tname'>B1</th><th class='tname'>B2</th><th class='aname'>SR</th><th class='aname'>SB</th></tr>";
+          "<table border='white'><tr><th class='code'>PM No.</th><th colspan='2' class='tname'>Red Alliance</th><th class='tname' colspan='2'>Blue Alliance</th><th class='aname'>SR</th><th class='aname'>SB</th></tr>";
         for (x in myObj) {
-          let SR =
-            parseFloat(myObj[x].scorered) * parseFloat(myObj[x].multiplierred) +
-            parseFloat(myObj[x].ascore) +
-            parseFloat(myObj[x].penblue) * 10 +
-            parseFloat(myObj[x].yelblue) * 20;
-          let SB =
-            parseFloat(myObj[x].scoreblue) *
-              parseFloat(myObj[x].multiplierblue) +
-            parseFloat(myObj[x].ascore) +
-            parseFloat(myObj[x].penred) * 10 +
-            parseFloat(myObj[x].yelred) * 20;
+          let SR = Number(myObj[x].fscorered);
+          let SB = Number(myObj[x].fscoreblue);
           console.log(SB);
           text +=
             "<tr><td>" +
@@ -88,7 +79,7 @@
         document.getElementById("demo").innerHTML = text;
         console.log(myObj);
       };
-      xmlhttp.open("GET", "http://192.168.0.15:3000/pmmatches");
+      xmlhttp.open("GET", "http://192.168.0.15:3000/pomatches");
       xmlhttp.send();
     </script>
   </body>

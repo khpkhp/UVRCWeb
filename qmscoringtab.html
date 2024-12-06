@@ -221,7 +221,7 @@
     async function getdata(event) {
       event.preventDefault();
       const matchnum = document.getElementById("dmatchnum").innerHTML;
-      const url = "http://192.168.95.70:3000/qmmatches/" + matchnum;
+      const url = "http://192.168.0.15:3000/qmmatches/" + matchnum;
       const form = event.currentTarget;
       try {
         const formData = new FormData(form);
@@ -477,7 +477,7 @@
         getresultblue1();
         getresultblue2();
       };
-      xmlhttp.open("GET", "http://192.168.95.70:3000/qmmatches/" + matchnum);
+      xmlhttp.open("GET", "http://192.168.0.15:3000/qmmatches/" + matchnum);
       xmlhttp.send();
     }
     async function sendresult(fscorered, fscoreblue, penred, penblue) {
@@ -515,7 +515,7 @@
       console.log("new:" + red1result);
       try {
         const responseData = await postFormDataAsJson(
-          "http://192.168.95.70:3000/results/" + red1,
+          "http://192.168.0.15:3000/results/" + red1,
           {
             rp: red1result[0],
             avg: red1result[1],
@@ -524,7 +524,7 @@
           }
         );
         const responseData2 = await postFormDataAsJson(
-          "http://192.168.95.70:3000/results/" + red2,
+          "http://192.168.0.15:3000/results/" + red2,
           {
             rp: red2result[0],
             avg: red2result[1],
@@ -533,7 +533,7 @@
           }
         );
         const responseData3 = await postFormDataAsJson(
-          "http://192.168.95.70:3000/results/" + blue1,
+          "http://192.168.0.15:3000/results/" + blue1,
           {
             rp: blue1result[0],
             avg: blue1result[1],
@@ -542,7 +542,7 @@
           }
         );
         const responseData4 = await postFormDataAsJson(
-          "http://192.168.95.70:3000/results/" + blue2,
+          "http://192.168.0.15:3000/results/" + blue2,
           {
             rp: blue2result[0],
             avg: blue2result[1],
@@ -562,7 +562,7 @@
 
     function getresultred1() {
       const xmlhttp2 = new XMLHttpRequest();
-      const url = "http://192.168.95.70:3000/results/" + red1;
+      const url = "http://192.168.0.15:3000/results/" + red1;
       xmlhttp2.onload = function () {
         const plainData = JSON.parse(this.responseText);
         console.log(plainData.rp);
@@ -586,7 +586,7 @@
         red2result[2] = plainData.pen;
         red2result[3] = plainData.matchplayed;
       };
-      xmlhttp3.open("GET", "http://192.168.95.70:3000/results/" + red2);
+      xmlhttp3.open("GET", "http://192.168.0.15:3000/results/" + red2);
       xmlhttp3.send();
     }
     function getresultblue1(teamname) {
@@ -598,7 +598,7 @@
         blue1result[2] = plainData.pen;
         blue1result[3] = plainData.matchplayed;
       };
-      xmlhttp4.open("GET", "http://192.168.95.70:3000/results/" + blue1);
+      xmlhttp4.open("GET", "http://192.168.0.15:3000/results/" + blue1);
       xmlhttp4.send();
     }
     function getresultblue2(teamname) {
@@ -610,7 +610,7 @@
         blue2result[2] = plainData.pen;
         blue2result[3] = plainData.matchplayed;
       };
-      xmlhttp5.open("GET", "http://192.168.95.70:3000/results/" + blue2);
+      xmlhttp5.open("GET", "http://192.168.0.15:3000/results/" + blue2);
       xmlhttp5.send();
     }
     const Form1 = document.getElementById("formmatchnum");

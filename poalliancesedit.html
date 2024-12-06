@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documents</title>
+  </head>
+  <style>
+    h1 {
+      font-family: "Noto Sans";
+      margin-top: 10px;
+      font-size: 42px;
+      text-align: center;
+      color: #a50c0c;
+      font-weight: bold;
+    }
+    th {
+      font-family: "Noto Sans";
+      font-size: 24px;
+      text-align: center;
+      font-weight: bold;
+      color: #a50c0c;
+      border-width: 2px;
+    }
+    tr {
+      width: 1000px;
+    }
+    td {
+      font-family: "Noto Sans";
+      font-size: 21px;
+      text-align: center;
+      border-width: 2px;
+    }
+    table {
+      border-collapse: collapse;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .tnum {
+      width: 200px;
+    }
+    .tname {
+      width: 300px;
+    }
+    .tcode {
+      width: 300px;
+    }
+  </style>
+
+  <body>
+    <h1>UVRC - ALLIANCE TAB - EDIT PO TEAMS</h1>
+    <table border="white" id="mytable">
+      <tr>
+        <th class="tnum">#</th>
+        <th class="tname">TEAM Name</th>
+        <th class="tcode">TEAM Code</th>
+        <th>Save</th>
+      </tr>
+      <tr>
+        <td>Alliance 1</td>
+        <form action="http://192.168.0.15:3000/poteams/0" id="form1">
+          <td>
+            <label for="team1">
+              <input type="text" name="team1" id="team1" />
+            </label>
+          </td>
+          <td>
+            <label for="team2">
+              <input type="text" name="team2" id="team2" />
+            </label>
+          </td>
+          <td>
+            <input type="submit" value="Save A1" />
+          </td>
+        </form>
+      </tr>
+
+      <tr>
+        <td>Alliance 2</td>
+        <form action="http://192.168.0.15:3000/poteams/1" id="form2">
+          <td>
+            <label for="team1">
+              <input type="text" name="team1" id="team1" />
+            </label>
+          </td>
+          <td>
+            <label for="team2">
+              <input type="text" name="team2" id="team2" />
+            </label>
+          </td>
+          <td>
+            <input type="submit" value="Save A2" />
+          </td>
+        </form>
+      </tr>
+      <tr>
+        <td>Alliance 3</td>
+        <form action="http://192.168.0.15:3000/poteams/2" id="form3">
+          <td>
+            <label for="team1">
+              <input type="text" name="team1" id="team1" />
+            </label>
+          </td>
+          <td>
+            <label for="team2">
+              <input type="text" name="team2" id="team2" />
+            </label>
+          </td>
+          <td>
+            <input type="submit" value="Save A3" />
+          </td>
+        </form>
+      </tr>
+      <tr>
+        <td>Alliance 4</td>
+        <form action="http://192.168.0.15:3000/poteams/3" id="form4">
+          <td>
+            <label for="team1">
+              <input type="text" name="team1" id="team1" />
+            </label>
+          </td>
+          <td>
+            <label for="team2">
+              <input type="text" name="team2" id="team2" />
+            </label>
+          </td>
+          <td>
+            <input type="submit" value="Save A4" />
+          </td>
+        </form>
+      </tr>
+    </table>
+
+    <script>
+      async function postFormDataAsJson({ url, formData }) {
+        const plainFormData = Object.fromEntries(formData.entries());
+        const formDataJsonString = JSON.stringify(plainFormData);
+        const fetchOptions = {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: formDataJsonString,
+        };
+
+        const response = await fetch(url, fetchOptions);
+
+        if (!response.ok) {
+          const errorMessage = await response.text();
+          throw new Error(errorMessage);
+        }
+
+        return response.json();
+      }
+      async function sendteamname1() {
+        event.preventDefault();
+        const form = event.currentTarget;
+        try {
+          const url = "http://192.168.0.15:3000/pomatches/PO1";
+          const formData = new FormData(form);
+          const plainFormData = Object.fromEntries(formData.entries());
+          console.log(plainFormData);
+          const json = JSON.stringify({
+            red1: plainFormData.team1,
+            red2: plainFormData.team2,
+          });
+          const fetchOptions = {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: json,
+          };
+
+          const response = await fetch(url, fetchOptions);
+
+          if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(errorMessage);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      async function sendteamname2() {
+        event.preventDefault();
+        const form = event.currentTarget;
+        try {
+          const url = "http://192.168.0.15:3000/pomatches/PO1";
+          const formData = new FormData(form);
+          const plainFormData = Object.fromEntries(formData.entries());
+          console.log(plainFormData);
+          const json = JSON.stringify({
+            blue1: plainFormData.team1,
+            blue2: plainFormData.team2,
+          });
+          const fetchOptions = {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: json,
+          };
+
+          const response = await fetch(url, fetchOptions);
+
+          if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(errorMessage);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      async function sendteamname3() {
+        event.preventDefault();
+        const form = event.currentTarget;
+        try {
+          const url = "http://192.168.0.15:3000/pomatches/PO2";
+          const formData = new FormData(form);
+          const plainFormData = Object.fromEntries(formData.entries());
+          console.log(plainFormData);
+          const json = JSON.stringify({
+            red1: plainFormData.team1,
+            red2: plainFormData.team2,
+          });
+          const fetchOptions = {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: json,
+          };
+
+          const response = await fetch(url, fetchOptions);
+
+          if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(errorMessage);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      async function sendteamname4() {
+        event.preventDefault();
+        const form = event.currentTarget;
+        try {
+          const url = "http://192.168.0.15:3000/pomatches/PO2";
+          const formData = new FormData(form);
+          const plainFormData = Object.fromEntries(formData.entries());
+          console.log(plainFormData);
+          const json = JSON.stringify({
+            blue1: plainFormData.team1,
+            blue2: plainFormData.team2,
+          });
+          const fetchOptions = {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: json,
+          };
+
+          const response = await fetch(url, fetchOptions);
+
+          if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(errorMessage);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      async function handleFormSubmit(event) {
+        event.preventDefault();
+
+        const form = event.currentTarget;
+        const url = form.action;
+
+        try {
+          const formData = new FormData(form);
+          const responseData = await postFormDataAsJson({ url, formData });
+
+          console.log({ responseData });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      const Form1 = document.getElementById("form1");
+      Form1.addEventListener("submit", handleFormSubmit);
+      Form1.addEventListener("submit", sendteamname1);
+
+      const Form2 = document.getElementById("form2");
+      Form2.addEventListener("submit", handleFormSubmit);
+      Form2.addEventListener("submit", sendteamname2);
+
+      const Form3 = document.getElementById("form3");
+      Form3.addEventListener("submit", handleFormSubmit);
+      Form3.addEventListener("submit", sendteamname3);
+
+      const Form4 = document.getElementById("form4");
+      Form4.addEventListener("submit", handleFormSubmit);
+      Form4.addEventListener("submit", sendteamname4);
+    </script>
+  </body>
+</html>

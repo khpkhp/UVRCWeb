@@ -1,0 +1,15 @@
+PLS READ this
+1.host thẳng online server, chạy json-server qua ip của máy host 
+(NHỚ SỬA URL JSONSERVER TRONG CODE CTRL + H REPLACE HẾT LÀ DC)
+jsonserver thỉnh thoảng khá ngu nên muốn reload cứ tắt đi host lại là dc 
+
+2. mọi thứ có thể sửa thẳng vào database (file json) nên nếu có bug cứ sửa/đọc thủ công file database là dc (e.g. cái file result bug điên nên t quyết định kh làm nữa (im not paid enough for that) nên cứ đọc thẳng từ result tab xong tính chay th chúc may)
+
+3. sửa tên team cũng thế t nhận ra ngồi code 1 cái tab riêng tốn tgian hơn sửa thẳng vào file json
+4. flow simply là hôm trc giải ngồi fix lại hết database (chỉnh tên team, lịch thi đấu, etc)
+sau mỗi trận điền headref tab trước (có 2 box, cái trc điền loại trận (pm/qm/po), cái sau điền mã trận (PM1/QM3.4/PO4) CASE SENSITIVE)
+sau đó scorekeep đếm hết bóng r điền scoring tab (NHỚ SUBMIT HEADREF TAB TRƯỚC KHI ĐIỀN SCORING)
+
+5. nhớ sửa mốc điểm alliance (biến ge/ascore) trong mấy tab scoring tại t kbt mng có bnh bóng
+
+6. ranking tab và screen tab kh tồn tại (ranking bug còn screen linh bảo t kh làm :<)
